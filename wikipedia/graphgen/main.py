@@ -23,7 +23,7 @@ def isAllowed(s):
 
 for i in range(zim.all_entry_count):
     entry = zim._get_entry_by_id(i)
-    if isAllowed(entry.title):
+    if isAllowed(entry.title) and zim.has_entry_by_title(entry.title):
         allowed.add(entry.title)
 
 print(len(allowed))
@@ -55,9 +55,8 @@ def push(entry):
 
 for title in allowed:
     # print(title)
-    if zim.has_entry_by_title(title):
-        entry = zim.get_entry_by_title(title)
-        values.add(entry)
+    entry = zim.get_entry_by_title(title)
+    values.add(entry)
 
 with ThreadPoolExecutor(max_workers=16) as exe:
     exe.map(push, values)
