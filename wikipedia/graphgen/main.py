@@ -50,8 +50,8 @@ def push(entry):
 
 
             relations[entry.title] = outlinks
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
 values = []
 
@@ -63,3 +63,4 @@ with ThreadPoolExecutor(max_workers=16) as exe:
     exe.map(push, values)
 
 print("done parsing, writing to db")
+print(len(relations))
