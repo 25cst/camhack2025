@@ -12,7 +12,7 @@ def test():
     dest = random.choice(entries)
 
     start = perf_counter()
-    print(suggest.path(src, dest))
+    print(suggest.path(readdb.id_to_title[src], readdb.id_to_title[dest]))
     end = perf_counter()
 
     return end - start

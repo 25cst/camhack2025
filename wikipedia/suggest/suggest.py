@@ -23,6 +23,8 @@ def randomWalk(origin, distance):
     return readdb.id_to_title[origin]
 
 def path(source, dest):
+    source = readdb.title_to_id[source]
+    dest = readdb.title_to_id[dest]
     q: deque[tuple[int, int]] = deque()
     q.append((source, source))
 
