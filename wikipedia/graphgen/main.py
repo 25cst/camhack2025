@@ -35,23 +35,23 @@ def push(entry):
     c += 1
     if c % 100 == 0:
         print(f"{c} of {len(values)}")
-        if not entry.title in allowed:
+
+    root = etree.fromstring(bytes(entry.get_item().content).decode("UTF-8"), parser)
+
+    outlinks = set()
+
+    for a in root.xpath("//a"):
+        href: str = a.get('href')
+        if href == None:
+            continue
+        href = href.split("#")[0]
+        if not href in allowed:
             return
-
-        root = etree.fromstring(bytes(entry.get_item().content).decode("UTF-8"), parser)
-
-        outlinks = set()
-
-        for a in root.xpath("//a"):
-            href: str = a.get('href')
-            if href == None:
-                continue
-            href = href.split("#")[0]
-            if zim.has_entry_by_title(href):
-                outlinks.add(href)
+        if zim.has_entry_by_title(href):
+            outlinks.add(href)
 
 
-        relations[entry.title] = outlinks
+    relations[entry.title] = outlinks
 
 for title in allowed:
     print(title)
