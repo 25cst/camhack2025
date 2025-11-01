@@ -1,5 +1,5 @@
 CREATE TABLE relations (
-    from       STRING NOT NULL,
-    to         STRING NOT NULL,
-    PRIMARY KEY (from, to)
-)
+    source      STRING NOT NULL,
+    dest        STRING NOT NULL,
+    PRIMARY KEY (source, dest)
+);
