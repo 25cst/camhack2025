@@ -17,11 +17,13 @@ fn count_words(s: &str) -> u32 {
 fn main() {
     let buf = fs::read_to_string("/home/siriusmart/Downloads/vital.txt").unwrap();
     let buf = buf.lines().flat_map(|s| {
-        s.split_whitespace().filter(|s| s.starts_with("[["))
+        s.split_whitespace().filter(|s| {
+            s.starts_with("[[") && s.trim().ends_with("]]")
+        })
     });
 
     let out = buf
-        .map(|s| &s[2..])
+        .map(|s| &s[2..s.len() - 2])
         .filter(|s| count_words(&s) <= 1)
         .filter(|s| s.chars().filter(|c| c.is_ascii_uppercase()).count() == 1 && s.chars().next().is_some_and(|c| c.is_ascii_uppercase()))
         .filter(|s| s.len() < 9 && s.len() > 4)
