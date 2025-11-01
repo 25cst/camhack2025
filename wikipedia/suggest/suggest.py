@@ -1,8 +1,9 @@
 from collections import deque
 import readdb
+import copy
 
 def path(source, dest):
-    q = deque()
+    q: deque[tuple[list[str], str]] = deque()
     q.append(([], source))
 
     visited = set()
@@ -13,10 +14,11 @@ def path(source, dest):
         if node in visited:
             continue
 
+        path.append(node)
+
         if node == dest:
-            path.append(node)
             return path
 
         for neighbour in readdb.relations[node]:
             if not neighbour in visited:
-                q.append(neighbour)
+                q.append((copy.deepcopy(path), neighbour))

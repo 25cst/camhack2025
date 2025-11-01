@@ -10,7 +10,7 @@ def test():
     dest = random.choice(entries)
 
     start = perf_counter()
-    suggest.path(src, dest)
+    print(suggest.path(src, dest))
     end = perf_counter()
 
     return end - start
