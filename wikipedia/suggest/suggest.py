@@ -1,3 +1,5 @@
-import sqlite3
+import readdb
 
-sqlite3.connect("./relations.sqlite")
+print(len(readdb.relations))
+def path(source, dest):
+    pass
