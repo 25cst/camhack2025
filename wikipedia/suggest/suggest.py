@@ -1,6 +1,5 @@
 from collections import deque
 import readdb
-import copy
 
 def path(source, dest):
     q: deque[tuple[int, int]] = deque()
