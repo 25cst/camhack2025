@@ -26,8 +26,6 @@ for i in range(zim.all_entry_count):
 
 print(len(allowed))
 
-exit(0)
-
 c = 0
 
 def push(entry):
@@ -35,27 +33,23 @@ def push(entry):
     c += 1
     if c % 100 == 0:
         print(f"{c} of {zim.all_entry_count}")
-        try:
+        if not entry.title in allowed:
+            return
 
-            if not entry.title in allowed:
-                return
+        root = etree.fromstring(bytes(entry.get_item().content).decode("UTF-8"), parser)
 
-            root = etree.fromstring(bytes(entry.get_item().content).decode("UTF-8"), parser)
+        outlinks = set()
 
-            outlinks = set()
-
-            for a in root.xpath("//a"):
-                href: str = a.get('href')
-                if href == None:
-                    continue
-                href = href.split("#")[0]
-                if zim.has_entry_by_title(href):
-                    outlinks.add(href)
+        for a in root.xpath("//a"):
+            href: str = a.get('href')
+            if href == None:
+                continue
+            href = href.split("#")[0]
+            if zim.has_entry_by_title(href):
+                outlinks.add(href)
 
 
-            relations[entry.title] = outlinks
-        except Exception as e:
-            print(e)
+        relations[entry.title] = outlinks
 
 values = []
 
