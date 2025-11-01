@@ -6,7 +6,8 @@ import sqlite3
 
 parser = etree.HTMLParser()
 
-zim = Archive(Path("/home/siriusmart/.local/share/kiwix/wikipedia_en_top_nopic_2025-09.zim"))
+# zim = Archive(Path("/home/siriusmart/.local/share/kiwix/wikipedia_en_top_nopic_2025-09.zim"))
+zim = Archive(Path("/home/chris/Downloads/wiki temp/wikipedia_en_top_nopic_2025-09.zim"))
 relations: dict[str, set[str]] = dict()
 
 c = 0
@@ -15,7 +16,7 @@ allowed = set()
 
 def isAllowed(s):
     for c in s:
-        if not (c.isalnum() or c == '_' or c == '-'):
+        if not (c.isalnum() or c == '_' or c == '-') or not c.isascii():
             return False
     return True
 
@@ -54,7 +55,7 @@ def push(entry):
     relations[entry.title] = outlinks
 
 for title in allowed:
-    print(title)
+    # print(title)
     if zim.has_entry_by_title(title):
         entry = zim.get_entry_by_title(title)
         values.add(entry)
@@ -63,4 +64,17 @@ with ThreadPoolExecutor(max_workers=16) as exe:
     exe.map(push, values)
 
 print("done parsing, writing to db")
-print(len(relations.keys()))
+
+con = sqlite3.connect("relations.sqlite")
+cursor = con.cursor()
+
+with open("relations.sql", "r") as f:
+    cursor.executescript(f.read())
+
+for title in allowed:
+    neighbours = relations[title]
+    cursor.executemany("INSERT INTO relations VALUES (?, ?);", zip([title] * len(neighbours), neighbours))
+
+con.commit()
+
+print(len(cursor.execute("SELECT * FROM relations;").fetchall()))
