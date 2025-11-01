@@ -24,6 +24,10 @@ for i in range(zim.all_entry_count):
     if isAllowed(entry.title):
         allowed.add(entry.title)
 
+print(len(allowed))
+
+exit(0)
+
 c = 0
 
 def push(entry):
@@ -63,4 +67,4 @@ with ThreadPoolExecutor(max_workers=16) as exe:
     exe.map(push, values)
 
 print("done parsing, writing to db")
-print(len(relations))
+print(relations.keys())
