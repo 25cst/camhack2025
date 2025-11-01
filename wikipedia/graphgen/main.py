@@ -2,6 +2,7 @@ from libzim.reader import Archive
 from pathlib import Path
 from lxml import etree
 from concurrent.futures import ThreadPoolExecutor
+import sqlite3
 
 parser = etree.HTMLParser()
 
