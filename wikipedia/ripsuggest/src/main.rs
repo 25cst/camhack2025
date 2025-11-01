@@ -1,8 +1,9 @@
 use std::{collections::{HashMap, HashSet, VecDeque}, env, fs, sync::OnceLock};
 
 use axum::{Json, Router, routing::{get, post}};
+use rand::{random_bool, rng, seq::IteratorRandom};
 use serde::{Deserialize, Serialize};
-use tokio::net::TcpListener;
+use tokio::{net::TcpListener, time::Instant};
 
 #[derive(Deserialize)]
 struct Req {
@@ -17,9 +18,11 @@ struct Res {
 }
 
 static RELATIONS: OnceLock<HashMap<String, HashSet<String>>> = OnceLock::new();
+static RELATIONS_REV: OnceLock<HashMap<String, HashSet<String>>> = OnceLock::new();
 
 fn bfs(source: &str, dest: &str) -> Option<Vec<String>> {
     let relations = RELATIONS.get().unwrap();
+    let relations_rev = RELATIONS_REV.get().unwrap();
     let mut queue = VecDeque::from([(vec![], source)]);
     let mut visited = HashSet::from([source]);
 
@@ -31,6 +34,14 @@ fn bfs(source: &str, dest: &str) -> Option<Vec<String>> {
         }
 
         if let Some(neighbours) = relations.get(node){
+            for neighbour in neighbours {
+                if visited.insert(neighbour) {
+                    queue.push_back((path.clone(), neighbour));
+                }
+            }
+        }
+
+        if let Some(neighbours) = relations_rev.get(node){
             for neighbour in neighbours {
                 if visited.insert(neighbour) {
                     queue.push_back((path.clone(), neighbour));
@@ -50,10 +61,31 @@ async fn main() {
 
     println!("Loading up cache.txt");
     let mut relations: HashMap<String, HashSet<String>> = HashMap::new();
+    let mut relations_rev: HashMap<String, HashSet<String>> = HashMap::new();
 
     for line in fs::read_to_string("../graphgen/cache.txt").unwrap().lines() {
         let mut chunks = line.split('|');
-        relations.insert(chunks.next().unwrap().to_string(), HashSet::from_iter(chunks.map(str::to_string)));
+        let current = chunks.next().unwrap().to_string();
+
+        relations.insert(current.clone(), HashSet::from_iter(chunks.map(str::to_string)));
+
+        for chunk in line.split('|').skip(1) {
+            if random_bool(0.95) {
+                continue;
+            }
+            relations_rev.entry(chunk.to_string()).or_insert(HashSet::new()).insert(current.clone());
+        }
+    }
+
+    RELATIONS.set(relations).unwrap();
+    RELATIONS_REV.set(relations_rev).unwrap();
+
+    let nodes = RELATIONS.get().unwrap().keys();
+    let chosen = nodes.choose_multiple(&mut rng(), 2000);
+
+    for i in 0..1000 {
+        let instant = Instant::now();
+        println!("{:?} in {}ms", bfs(chosen[2 * i], chosen[2 * i + 1]), instant.elapsed().as_millis())
     }
 
     let app = Router::new()
