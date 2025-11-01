@@ -1,3 +1,5 @@
+import random
+
 id_to_title: dict[int, str] = {}
 title_to_id: dict[str, int] = {}
 
@@ -7,7 +9,8 @@ relations: dict[int, list[int]] = dict()
 print("Reading cache.txt")
 def connect_nodes(a, b):
     _relations_sets[a].add(b)
-    _relations_sets[b].add(a)
+    if random.uniform(0, 1) < 0.1:
+        _relations_sets[b].add(a)
 
 with open("../graphgen/cache.txt", "r") as f:
     lines = f.readlines()
