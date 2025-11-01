@@ -64,6 +64,16 @@ with ThreadPoolExecutor(max_workers=16) as exe:
 print("done parsing, writing to db")
 print(len(relations))
 
+entryLines = []
+
+for title in allowed:
+    neighbours = relations[title]
+    entries = [title, *neighbours]
+    entryLines.append("|".join(entries))
+
+with open("cache.txt", "w") as f:
+  f.write("\n".join(entryLines))
+
 con = sqlite3.connect("relations.sqlite")
 cursor = con.cursor()
 
