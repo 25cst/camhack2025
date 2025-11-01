@@ -4,6 +4,7 @@ title_to_id: dict[str, int] = {}
 _relations_sets: dict[int, set[int]] = dict()
 relations: dict[int, list[int]] = dict()
 
+print("Reading cache.txt")
 def connect_nodes(a, b):
     _relations_sets[a].add(b)
     _relations_sets[b].add(a)
@@ -25,3 +26,4 @@ with open("../graphgen/cache.txt", "r") as f:
 
     for title_id in _relations_sets.keys():
         relations[title_id] = sorted(_relations_sets[title_id], key=lambda x: len(_relations_sets[x]), reverse=True)
+print("Done reading cache.txt")
