@@ -3,22 +3,25 @@ import readdb
 import copy
 
 def path(source, dest):
-    q: deque[tuple[list[str], str]] = deque()
-    q.append(([], source))
+    q: deque[tuple[int, int]] = deque()
+    q.append((source, source))
 
-    visited = set()
+    visited = {source}
+    prev_nodes = {}
 
     while len(q) != 0:
-        (path, node) = q.popleft()
-        
-        if node in visited:
-            continue
-
-        path.append(node)
+        (prev, node) = q.popleft()
+        prev_nodes[node] = prev
 
         if node == dest:
-            return path
+            p = []
+            while node != source:
+                p.append(readdb.id_to_title[node])
+                node = prev_nodes[node]
+            p.append(readdb.id_to_title[source])
+            return p[::-1]
 
         for neighbour in readdb.relations[node]:
             if not neighbour in visited:
-                q.append((copy.deepcopy(path), neighbour))
+                visited.add(neighbour)
+                q.append((node, neighbour))

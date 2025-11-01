@@ -5,6 +5,8 @@ import random
 
 entries = list(readdb.relations.keys())
 
+print("done loading")
+
 def test():
     src = random.choice(entries)
     dest = random.choice(entries)
