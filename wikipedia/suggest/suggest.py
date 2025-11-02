@@ -47,5 +47,3 @@ def path(source, dest):
             if not neighbour in visited:
                 visited.add(neighbour)
                 q.append((node, neighbour))
-
-print(randomWalk("Physics", 1))
