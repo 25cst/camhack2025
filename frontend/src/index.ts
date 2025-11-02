@@ -99,8 +99,10 @@ const wordList = loadWordList();
 
 // Get a random word within length range
 function getRandomWord(minLength: number, maxLength: number): string {
+    /*
     let words = ["Mathematics", "Physics", "JavaScript", "Internet"];
     return words[Math.floor(Math.random() * words.length)] as string;
+    */
   const filteredWords = wordList.filter(word => 
     word.length >= minLength && word.length <= maxLength
   );
@@ -112,7 +114,7 @@ function getRandomWord(minLength: number, maxLength: number): string {
   const randomIndex = Math.floor(Math.random() * filteredWords.length);
   let out = filteredWords[randomIndex];
   assert(out !== undefined);
-  // return out;
+  return out;
 }
 
 app.get('/api/hascode', (req, res) => {
