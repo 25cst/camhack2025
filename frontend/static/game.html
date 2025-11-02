@@ -22,7 +22,7 @@ const code = params.get('code');
 
         document.getElementById("graph").src = `/api/graph?code=${code}`
         let round = 1
-        let gusses = []
+        let guesses = []
         document.getElementById("guess").onclick = async () => {
             guess = prompt("Make a guess")
             guesses.push(guess)
