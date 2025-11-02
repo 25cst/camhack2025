@@ -23,7 +23,7 @@
             let res = await fetch("/api/newgame");
             let json = await res.json();
             let code = json.code
-            window.location.href = `/game?single=1&code=${code.toLowerCase()}`
+            window.location.href = `/game.html?single=1&code=${code.toLowerCase()}`
         }
 
         document.getElementById("join").onclick = () => {
