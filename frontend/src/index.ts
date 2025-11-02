@@ -3,6 +3,16 @@ import express = require('express');
 import fs = require('fs');
 import path = require('path');
 
+function generateRandomString(length: number): string {
+    const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        result += characters[randomIndex];
+    }
+    return result;
+}
+
 const app = express();
 const port = process.env.PORT ?? 8083;
 
@@ -103,6 +113,14 @@ function getRandomWord(minLength: number, maxLength: number): string {
   return out;
 }
 
+app.get('/api/hascode', (req, res) => {
+    const code = req.query.code as string;
+
+    return res.status(200).json({
+        exists: codeMap.has(code)
+    })
+})
+
 // Routes
 app.get('/api/newgame', (req, res) => {
   try {
@@ -120,8 +138,11 @@ app.get('/api/newgame', (req, res) => {
     const targetWord = getRandomWord(minLength, maxLength);
     
     console.log(`New game created with target word: ${targetWord}`);
+
+    let code = generateRandomString(6);
+    codeMap.set(code, targetWord)
     
-    const response: NewGameResponse = { code: targetWord };
+    const response: NewGameResponse = { code: code };
     res.json(response);
   } catch (error) {
     console.error('Error creating new game:', error);
@@ -144,7 +165,7 @@ app.get('/api/guess', (req, res) => {
     }
 
     const roundNum = parseInt(round);
-    if (isNaN(roundNum) || roundNum < 1 || roundNum > 5) {
+    if (isNaN(roundNum) || roundNum <= 1 || roundNum >= 5) {
       return res.status(400).json({ 
         error: 'Round must be an integer between 1 and 5' 
       });
