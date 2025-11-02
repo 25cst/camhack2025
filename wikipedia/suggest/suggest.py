@@ -110,4 +110,4 @@ def get_hints(guess, secret, n, hint_level):
     if guess_dist == -1:
         guess_dist = 100
 
-    return hints, max(100 * (6 - guess_dist) / 6, 0)
+    return hints, int(max(100 * (6 - guess_dist) / 6, 0))

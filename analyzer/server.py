@@ -4,8 +4,10 @@ import json
 import os
 import urllib.parse
 from pathlib import Path
+import gettingdata
 
 WORDLIST_PATH = Path(__file__).parent / "data" / "wordlist.txt"
+IMG_SAVE_PATH = Path(__file__).parent / "img" / "graph.png"
 
 class Handler(BaseHTTPRequestHandler):
     # request = empty
@@ -22,7 +24,7 @@ class Handler(BaseHTTPRequestHandler):
 
     # request = { keywords: list[str] }
     # response = { image: str }
-    # in this response, you should save the image file to /freq-scraping/img
+    # in this response, you should save the image file to analyzer/img/graph.png
     # and return the file name of the file
     def draw_graph_dandler(self, body):
         raise Exception("TODO")
