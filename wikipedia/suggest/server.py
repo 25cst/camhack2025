@@ -4,6 +4,7 @@ import json
 import os
 import readdb
 import urllib.parse
+from suggest import get_hints
 
 class Handler(BaseHTTPRequestHandler):
     # request = empty body
@@ -14,7 +15,7 @@ class Handler(BaseHTTPRequestHandler):
     # request = { guess: str, secret: str, n: int } you should return n hints
     # response = { words: list[str], closeness: int } closeness should be a int from 0 to 100
     def gethint_handler(self, body):
-        raise Exception("TODO")
+        return { 'words': list(get_hints(body["guess"], body["secret"], body["n"], body["hint_level"])) }
 
     def do_GET(self):
         response = { 'type': 'error', 'reason': 'Not found' }
