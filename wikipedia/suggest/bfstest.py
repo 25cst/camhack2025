@@ -7,13 +7,24 @@ entries = list(readdb.relations.keys())
 
 print("done loading")
 
+print(readdb.relations[readdb.title_to_id["Apocynthion"]])
+
 def test():
     src = random.choice(entries)
     dest = random.choice(entries)
+    print("doing",readdb.id_to_title[src], readdb.id_to_title[dest])
+
+    src = readdb.title_to_id["Apocynthion"]
+    dest = readdb.title_to_id["AC-DC"]
 
     start = perf_counter()
-    print(suggest.path(readdb.id_to_title[src], readdb.id_to_title[dest]))
+    # print(list(suggest.get_multiple_paths_lazy(readdb.id_to_title[src], readdb.id_to_title[dest])))
+    print(s := suggest.get_hints(readdb.id_to_title[src], readdb.id_to_title[dest], 5, 2))
+    if len(s) == 0:
+        print("couldn't find", readdb.id_to_title[src], readdb.id_to_title[dest])
     end = perf_counter()
+
+    assert len(s) == 5
 
     return end - start
 

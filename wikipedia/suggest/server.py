@@ -11,7 +11,7 @@ class Handler(BaseHTTPRequestHandler):
     def wordlist_handler(self):
         return { 'words': list(map((lambda i : readdb.id_to_title[i]), readdb.relations.keys())) }
 
-    # request = { guess: str, secret: str, n: int } you should return n hints
+    # request = { guess: str, secret: str, n: int, hint_level } you should return n hints
     # response = { words: list[str] }
     def gethint_handler(self, body):
         raise Exception("TODO")
