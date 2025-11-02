@@ -165,26 +165,9 @@ app.get('/api/guess', (req, res) => {
     }
 
     const roundNum = parseInt(round);
-    if (isNaN(roundNum) || roundNum <= 1 || roundNum >= 5) {
-      return res.status(400).json({ 
-        error: 'Round must be an integer between 1 and 5' 
-      });
-    }
 
     const codeLower = code.toLowerCase();
     const guessLower = guess.toLowerCase();
-
-    if (!wordList.includes(codeLower)) {
-      return res.status(400).json({ 
-        error: 'Invalid target word' 
-      });
-    }
-
-    if (!wordList.includes(guessLower)) {
-      return res.status(400).json({ 
-        error: 'Invalid guess - word not in word list' 
-      });
-    }
 
     console.log(`Guess for target "${code}": "${guess}" in round ${roundNum}`);
     
