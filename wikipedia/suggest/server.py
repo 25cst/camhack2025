@@ -59,8 +59,8 @@ def getPort():
         return 8081
 
 def run():
-    server = ThreadingSimpleServer(('127.0.0.1', getPort()), Handler)
-    print(f"Server started on 127.0.0.1:{getPort()}")
+    server = ThreadingSimpleServer(('0.0.0.0', getPort()), Handler)
+    print(f"Server started on 0.0.0.0:{getPort()}")
     server.serve_forever()
 
 if __name__ == '__main__':
