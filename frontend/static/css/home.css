@@ -14,7 +14,6 @@ img {
 
 #full {
     width: 100%;
-    display: none;
 }
 
 .img-wrapper {
@@ -32,6 +31,7 @@ img {
     width: 100%;
     scale: 80%;
     transform: translate(0%, 25%);
+    cursor: pointer;
 }
 
 #singleplayer:hover {
@@ -42,10 +42,36 @@ img {
     width: 100%;
     scale: 83%;
     transform: translate(-2%, 15%);
+    cursor: pointer;
+}
+
+#lobby:hover {
+    filter: hue-rotate(240deg)
 }
 
 #join {
     width: 100%;
     scale: 88%;
     transform: translate(0%, 12%);
+    cursor: pointer;
 }
+
+#join:hover {
+    filter: hue-rotate(-25deg)
+}
+
+#create-back {
+    width: 100%;
+}
+
+#create-button {
+    width: 100%;
+    scale: 68%;
+    transform: translate(5%, calc(12% - 50vh));
+    cursor: pointer;
+}
+
+#create-button:hover {
+    filter: hue-rotate(-110deg)
+}
+
