@@ -186,6 +186,7 @@ app.get('/api/guess', (req, res) => {
 
 app.get('/api/graph', async (req, res) => {
     let { code, guesses } = req.query;
+    console.log(req.query)
     if(typeof guesses === "string") {
         guesses = [ guesses ]
     }
