@@ -1,15 +1,17 @@
 import json
 import matplotlib.pyplot as plt
-import csv
-from analyzer.main import classify
+import numpy as np
 from pathlib import Path
+import pandas as pd
+import csv
 
 '''
 nice_data.json is in analyzer/data
 '''
 
-TOTALCOUNT_PATH = Path(__file__).parent / "data" / "totalcounts-1.tsv"
-NICEDATA_PATH = Path(__file__).parent / "data" / "nice_data.json"
+DATA_PATH = Path(__file__).parent / "data"
+TOTALCOUNT_PATH = DATA_PATH / "totalcounts-1.tsv"
+NICEDATA_PATH = DATA_PATH / "nice_data.json"
 
 def getWord(word):
     wordYears = []
@@ -45,6 +47,28 @@ def drawGraph(years, values):
     plt.grid(True, linestyle='--', alpha=0.5)
 
     plt.show()
+
+def classify(dataset, years):
+    # Classifies a word's dataset into easy hard or bad
+    smallstep = 1
+    bigstep = 5
+    
+    smolmax = 0
+    bigmax = 0
+    biggestdata = 0
+    smollestdata=0
+    for i in range(years - bigstep):
+        if i==1:
+            smollestdata=dataset[i+1900]
+        else:
+            smollestdata=min(smollestdata, dataset[i+1900])
+        biggestdata = max(biggestdata, dataset[i+1900])
+        smolmax = max(dataset[i+1900 + bigstep] - dataset[i+1900], smolmax)
+        bigmax = max(dataset[i+1900 + bigstep] - dataset[i+1900], bigmax)
+    
+
+    difficulty = (smolmax/(biggestdata - smollestdata)) + (bigmax/(biggestdata - smollestdata))
+    return difficulty
 
 wrd = 'the'
 
