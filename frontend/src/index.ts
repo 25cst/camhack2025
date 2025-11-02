@@ -20,7 +20,7 @@ let graphCache: Map<string, string> = new Map();
 let codeMap: Map<string, string> = new Map()
 
 function createGraphURL(words: string[]) {
-    const baseURL = 'http://localhost:8082/graph';
+    const baseURL = 'http://127.0.0.1:8082/graph';
     const keywords = words.map(word => `keywords=${encodeURIComponent(word)}`).join('&');
     return `${baseURL}?${keywords}`;
 }
@@ -171,7 +171,7 @@ app.get('/api/guess', (req, res) => {
 
     console.log(`Guess for target "${code}": "${guess}" in round ${roundNum}`);
     
-    fetch(`http://localhost:8081/gethint?guess=${guess}&secret=${codeMap.get(code)}&n=3&hint_level=2`)
+    fetch(`http://127.0.0.1:8081/gethint?guess=${guess}&secret=${codeMap.get(code)}&n=3&hint_level=2`)
         .then((response) => response.json())
         .then((json) => {
     const response: GuessResponse = json as GuessResponse
