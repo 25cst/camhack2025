@@ -5,11 +5,13 @@ import os
 import urllib.parse
 from pathlib import Path
 
+WORDLIST_PATH = Path(__file__).parent / "data" / "wordlist.txt"
+
 class Handler(BaseHTTPRequestHandler):
     # request = empty
     # response = { words: list[str] }
     def wordlist_handler(self, body):
-        file_path = Path(__file__).parent / "wordlist.txt"
+        file_path = WORDLIST_PATH
         with open(file_path) as f:
             return {"words" : [w.strip() for w in f.readlines()]}
         

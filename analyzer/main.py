@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import random
 import scipy
+
 testDict = {}
 years = 120
 for i in range(years):
@@ -33,18 +34,18 @@ def classify(dataset, years):
     return difficulty
     
 
-# 0.9486 --> 2
-# 0.613
+# # 0.9486 --> 2
+# # 0.613
 
-x = np.array(list(testDict.keys()))
-y = np.array(list(testDict.values()))
-
-
-f_cubic = scipy.interpolate.interp1d(x, y, kind='cubic')  # smoother curve
-Y = f_cubic(x)
+# x = np.array(list(testDict.keys()))
+# y = np.array(list(testDict.values()))
 
 
-print(classify(testDict, years))
-plt.plot(x, Y, color='blue', label='Cubic interpolation')
-plt.show()
+# f_cubic = scipy.interpolate.interp1d(x, y, kind='cubic')  # smoother curve
+# Y = f_cubic(x)
+
+
+# print(classify(testDict, years))
+# plt.plot(x, Y, color='blue', label='Cubic interpolation')
+# plt.show()
 
