@@ -10,22 +10,6 @@
         <img src="/api/graph" alt="">
         <button id="guess">make guess</button>
         <ol id="list">
-            <li>
-                <p>Guess 1</p>
-                <p>Hints: test</p>
-            </li>
-            <li>
-                <p>Guess 1</p>
-                <p>Hints: test</p>
-            </li>
-            <li>
-                <p>Guess 1</p>
-                <p>Hints: test</p>
-            </li>
-            <li>
-                <p>Guess 1</p>
-                <p>Hints: test</p>
-            </li>
         </ol>
     </body>
     <script>
@@ -40,6 +24,7 @@ const code = params.get('code');
             guess = prompt("Make a guess")
 
             let hints = await fetch(`/api/guess?guess=${guess}&code=${code}&round=${round}`)
+            console.log(hints)
             document.getElementById("list").innerHTML += `<li>Guess ${round++}: ${guess}, hints: ${hints.words.map(([word, score]) => word).join(", ")}<li>`
         }
 
