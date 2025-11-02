@@ -99,7 +99,8 @@ const wordList = loadWordList();
 
 // Get a random word within length range
 function getRandomWord(minLength: number, maxLength: number): string {
-    return "Mathematics";
+    let words = ["Mathematics", "Physics", "JavaScript", "Internet"];
+    return words[Math.floor(Math.random() * words.length)] as string;
   const filteredWords = wordList.filter(word => 
     word.length >= minLength && word.length <= maxLength
   );
