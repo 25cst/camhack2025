@@ -12,10 +12,12 @@ IMG_SAVE_PATH = Path(__file__).parent / "img" / "graph.png"
 class Handler(BaseHTTPRequestHandler):
     # request = empty
     # response = { words: list[str] }
+
+    with open(WORDLIST_PATH) as f:
+        words = {"words" : [w.strip() for w in f.readlines()]}
+
     def wordlist_handler(self, body):
-        file_path = WORDLIST_PATH
-        with open(file_path) as f:
-            return {"words" : [w.strip() for w in f.readlines()]}
+        return self.words
         
     # request = empty
     # response = { secret: str }
@@ -26,9 +28,11 @@ class Handler(BaseHTTPRequestHandler):
     # response = { image: str }
     # in this response, you should save the image file to analyzer/img/graph.png
     # and return the file name of the file
-    def draw_graph_dandler(self, body):
-        raise Exception("TODO")
-
+    def draw_graph_handler(self, body):
+        # print(body['keywords'])
+        gettingdata.graph_of_words(body['keywords'], save_path=IMG_SAVE_PATH)
+        return {'image':str(IMG_SAVE_PATH) }
+    
     def do_GET(self):
         response = { 'type': 'error', 'reason': 'Not found' }
         status = 404
@@ -42,7 +46,7 @@ class Handler(BaseHTTPRequestHandler):
                     response = {'type': "hello", "reason": 'world'}
                     status = 200
                 case "/graph":
-                    self.draw_graph_dandler(query_params)
+                    response = self.draw_graph_handler(query_params)
                     status = 200
                 case "/wordlist":
                     response = self.wordlist_handler(query_params)

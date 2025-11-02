@@ -1,5 +1,10 @@
 import json
+
+import os
+os.environ["MPLBACKEND"] = "Agg"
+
 import matplotlib.pyplot as plt
+
 import numpy as np
 from pathlib import Path
 import pandas as pd
@@ -147,7 +152,7 @@ def drawGraph(years: list[np.ndarray], values: list[np.ndarray], words, save_pat
 
     if save_path:
         fig.savefig(save_path, dpi=150, bbox_inches="tight", transparent=True)
-
+        plt.close(fig)
     if show:
         plt.show()
 
@@ -184,5 +189,5 @@ def classify(dataset, years):
 
 if __name__ == '__main__':
 
-    graph_of_words(["the", "war", "orange", "linux", "and"], save_path=IMG_SAVE_PATH, show=True)
+    graph_of_words(["the", "war"], save_path=IMG_SAVE_PATH, show=True)
     # print(classify(list(years), list(values)))
