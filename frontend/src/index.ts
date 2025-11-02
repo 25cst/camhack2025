@@ -197,7 +197,7 @@ app.get('/api/graph', async (req, res) => {
 
     assert (Array.isArray(guesses))
 
-    let imagePath = await getGraph([word].concat(guesses.map(s => `${s}`)))
+    let imagePath = await getGraph([word.toLowerCase()].concat(guesses.map(s => `${s}`.toLowerCase())))
 
     res.sendFile(imagePath, (err) => {
             if (err) {
