@@ -34,6 +34,11 @@ const code = params.get('code');
                 return
             }
 
+            if(hints.words.length === 0) {
+                alert("you got it!")
+                return
+            }
+
             document.getElementById("graph").src = `/api/graph?code=${code}${guesses.map(s => `&guesses=${s}`).join("")}`
 // 
             document.getElementById("list").innerHTML += `<li>Guess ${round++}: ${guess}<br>hints: ${hints.words.map(([word, score]) => word).join(", ")}<li>`
