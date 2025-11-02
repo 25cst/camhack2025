@@ -64,14 +64,36 @@ img {
     width: 100%;
 }
 
-#create-button {
+#create-easy {
     width: 100%;
-    scale: 68%;
-    transform: translate(5%, calc(12% - 50vh));
+    scale: 45%;
+    transform: translate(0%, calc(12% - 135vh));
     cursor: pointer;
 }
 
-#create-button:hover {
+#create-easy:hover {
+    filter: hue-rotate(-110deg)
+}
+
+#create-normal {
+    width: 100%;
+    scale: 45%;
+    transform: translate(0%, calc(12% - 175vh));
+    cursor: pointer;
+}
+
+#create-normal:hover {
+    filter: hue-rotate(-110deg)
+}
+
+#create-hard {
+    width: 100%;
+    scale: 45%;
+    transform: translate(0%, calc(12% - 210vh));
+    cursor: pointer;
+}
+
+#create-hard:hover {
     filter: hue-rotate(-110deg)
 }
 
