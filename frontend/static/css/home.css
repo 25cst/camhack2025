@@ -1,5 +1,4 @@
 #main {
-    background: red;
     width: min(100vw, 75vh);
     height: min(100vh, 133.333333333vh);
     margin: auto;
@@ -15,7 +14,7 @@ img {
 
 #full {
     width: 100%;
-    filter: grayscale(100)
+    display: none;
 }
 
 .img-wrapper {
@@ -29,5 +28,20 @@ img {
     transform: translate(3%, 8%);
 }
 
-#title:hover {
+#singleplayer {
+    width: 100%;
+    scale: 80%;
+    transform: translate(0%, 25%);
+}
+
+#lobby {
+    width: 100%;
+    scale: 83%;
+    transform: translate(-2%, 15%);
+}
+
+#join {
+    width: 100%;
+    scale: 88%;
+    transform: translate(0%, 12%);
 }
