@@ -24,7 +24,7 @@ const code = params.get('code');
             guess = prompt("Make a guess")
 
             let hints = await fetch(`/api/guess?guess=${guess}&code=${code}&round=${round}`)
-            console.log(hints)
+            hints = await hints.json()
             document.getElementById("list").innerHTML += `<li>Guess ${round++}: ${guess}, hints: ${hints.words.map(([word, score]) => word).join(", ")}<li>`
         }
 
