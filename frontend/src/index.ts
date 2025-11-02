@@ -208,8 +208,7 @@ app.get('/api/graph', async (req, res) => {
 
     assert (Array.isArray(guesses))
 
-    let imageName = await getGraph([word].concat(guesses.map(s => `${s}`)))
-    let imagePath = path.join(`../analyzer/img/${imageName}`)
+    let imagePath = await getGraph([word].concat(guesses.map(s => `${s}`)))
 
     res.sendFile(imagePath, (err) => {
             if (err) {

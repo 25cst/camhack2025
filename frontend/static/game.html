@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title></title>
+        <link href="css/style.css" rel="stylesheet">
+    </head>
+    <body>
+        <img src="/api/graph" alt="">
+        <button id="guess">make guess</button>
+        <ol id="list">
+            <li>
+                <p>Guess 1</p>
+                <p>Hints: test</p>
+            </li>
+            <li>
+                <p>Guess 1</p>
+                <p>Hints: test</p>
+            </li>
+            <li>
+                <p>Guess 1</p>
+                <p>Hints: test</p>
+            </li>
+            <li>
+                <p>Guess 1</p>
+                <p>Hints: test</p>
+            </li>
+        </ol>
+    </body>
+    <script>
+        const url = new URL(window.location.href); // Get the current URL
+const params = new URLSearchParams(url.search);
+
+// Get a specific parameter
+const code = params.get('code'); 
+
+        let round = 1
+        document.getElementById("guess").onclick = async () => {
+            guess = prompt("Make a guess")
+
+            let hints = await fetch(`/api/guess?guess=${guess}&code=${code}&round=${round}`)
+            document.getElementById("list").innerHTML += `<li>Guess ${round++}: ${guess}, hints: ${hints.words.map(([word, score]) => word).join(", ")}<li>`
+        }
+
+    </script>
+</html>

@@ -14,4 +14,21 @@
             <img src="./img/homescreen-join.png" id="join">
         </div>
     </body>
+    <script>
+        document.getElementById("lobby").onclick = () => {
+            window.location.href = "/create.html"
+        }
+
+        document.getElementById("singleplayer").onclick = async () => {
+            let res = await fetch("/api/newgame");
+            let json = await res.json();
+            let code = json.code
+            window.location.href = `/game?single=1&code=${code.toLowerCase()}`
+        }
+
+        document.getElementById("join").onclick = () => {
+            let code = prompt("Enter lobby code")
+            window.location.href = `/game?code=${code.toLowerCase()}`
+        }
+    </script>
 </html>
