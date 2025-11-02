@@ -1,5 +1,12 @@
 from collections import deque
+from sentence_transformers import SentenceTransformer
 import readdb
+
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
+emb = model.encode(["Vegetable"])
+print(emb)
+
 
 def get_nodes_at_dist_lazy(source, dist):
     source = readdb.title_to_id[source]
@@ -74,6 +81,9 @@ def get_nodes_bfs_lazy(source):
                 visited.add(neighbour)
                 q.append(neighbour)
 
+def get_closeness(w1, w2):
+    ...
+
 def get_hints(guess, secret, n, hint_level):
     hints = set()
     guess_dist = -1
@@ -87,16 +97,16 @@ def get_hints(guess, secret, n, hint_level):
         if hint_length <= 2:
             continue
 
-        hints.add(hint_path[-min(guess_dist - hint_level + 1, guess_dist)])
+        hints.add(hint_path[-max(min(guess_dist - hint_level + 1, guess_dist), 2)])
         if len(hints) == n:
-            return hints
+            return hints, int(max(100 * (6 - guess_dist) / 6, 0))
 
     for hint in get_nodes_at_dist_lazy(secret, max((guess_dist - hint_level if guess_dist >= 0 else hint_level), 1)):
         if hint != guess and hint != secret and hint not in hints:
             hints.add(hint)
 
         if len(hints) == n:
-            return hints
+            return hints, int(max(100 * (6 - guess_dist) / 6, 0))
 
     # this is just in case the other two approaches don't find enough hints - searches for any nodes that are not yet in hints
     for hint in get_nodes_bfs_lazy(secret):
@@ -104,7 +114,7 @@ def get_hints(guess, secret, n, hint_level):
             hints.add(hint)
 
         if len(hints) == n:
-            return hints
+            return hints, int(max(100 * (6 - guess_dist) / 6, 0))
 
     # if no path found, set the distance to a big number so that closeness is 0
     if guess_dist == -1:

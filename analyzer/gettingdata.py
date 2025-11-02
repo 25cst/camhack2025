@@ -168,10 +168,13 @@ def drawGraph(years: list[np.ndarray], values: list[np.ndarray], words, save_pat
 
 def graph_of_words(words, years=[], values=[], save_path=None, show=False):
 
-    for word in words:
+    for i, word in enumerate(words):
+        if i < len(years):
+            continue
         yy, vv = getWord(word)
         years.append(yy)
         values.append(vv)
+        
     drawGraph(years, values, words, save_path, show)
     return years, values
 

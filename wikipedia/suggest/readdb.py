@@ -27,4 +27,7 @@ with open("../graphgen/cache.txt", "r") as f:
             neighbour_id = title_to_id[chunk.strip()]
             connect_nodes(title_id, neighbour_id)
 
+    for title_id in _relations_sets.keys():
+        relations[title_id] = sorted(_relations_sets[title_id], key=lambda x: len(_relations_sets[x]), reverse=True)
+
 print("Done reading cache.txt")

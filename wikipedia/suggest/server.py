@@ -15,7 +15,8 @@ class Handler(BaseHTTPRequestHandler):
     # request = { guess: str, secret: str, n: int, hint_level: int } you should return n hints
     # response = { words: list[tuple[str, int]], closeness: int } closeness should be a int from 0 to 100
     def gethint_handler(self, body):
-        hints, closeness = get_hints(body["guess"], body["secret"], body["n"], body["hint_level"])
+        print(body)
+        hints, closeness = get_hints(body["guess"][0], body["secret"][0], int(body["n"][0]), int(body["hint_level"][0]))
         return { 'words': list(zip(hints, [closeness] * len(hints))), 'closeness': closeness }
 
     def do_GET(self):
@@ -26,7 +27,7 @@ class Handler(BaseHTTPRequestHandler):
         query_params = urllib.parse.parse_qs(parsed_path.query)
 
         try:
-            match self.path:
+            match parsed_path.path:
                 case "/":
                     response = {'type': "hello", "reason": 'world'}
                     status = 200
