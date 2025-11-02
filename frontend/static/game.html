@@ -6,8 +6,8 @@
         <title></title>
         <link href="css/style.css" rel="stylesheet">
     </head>
-    <body>
-        <img src="/api/graph" alt="" id="graph" style="width: 50%; margin: auto; display: block">
+    <body style="width: 50%; margin: auto">
+        <img src="/api/graph" alt="" id="graph" style="width: 100%; margin: auto; display: block">
         <br>
         <button id="guess">make guess</button>
         <ol id="list">
@@ -41,7 +41,7 @@ const code = params.get('code');
 
             document.getElementById("graph").src = `/api/graph?code=${code}${guesses.map(s => `&guesses=${s}`).join("")}`
 // 
-            document.getElementById("list").innerHTML += `<li>Guess ${round++}: ${guess}<br>hints: ${hints.words.map(([word, score]) => word).join(", ")}<li>`
+            document.getElementById("list").innerHTML += `<li>Guess ${round++}: ${guess}<br>hints: ${hints.words.map(([word, score]) => word).join(", ")}</li>`
         }
 
     </script>
