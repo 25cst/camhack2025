@@ -7,7 +7,8 @@
         <link href="css/style.css" rel="stylesheet">
     </head>
     <body>
-        <img src="/api/graph" alt="" id="graph" style="width: 50%; margin: auto">
+        <img src="/api/graph" alt="" id="graph" style="width: 50%; margin: auto; display: block">
+        <br>
         <button id="guess">make guess</button>
         <ol id="list">
         </ol>
@@ -21,12 +22,14 @@ const code = params.get('code');
 
         document.getElementById("graph").src = `/api/graph?code=${code}`
         let round = 1
+        let gusses = []
         document.getElementById("guess").onclick = async () => {
             guess = prompt("Make a guess")
+            guesses.push(guess)
 
-            let hints = await fetch(`/api/guess?guess=${guess}&code=${code}&round=${round}`)
+            let hints = await fetch(`/api/guess?guess=${guess}&code=${code}&round=${round}${guesses.map(s => `&guesses=${s}`).join("")})
             hints = await hints.json()
-            document.getElementById("list").innerHTML += `<li>Guess ${round++}: ${guess}, hints: ${hints.words.map(([word, score]) => word).join(", ")}<li>`
+            document.getElementById("list").innerHTML += `<li>Guess ${round++}: ${guess}<br>hints: ${hints.words.map(([word, score]) => word).join(", ")}<li>`
         }
 
     </script>
