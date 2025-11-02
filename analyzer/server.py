@@ -32,19 +32,23 @@ class Handler(BaseHTTPRequestHandler):
         parsed_path = urllib.parse.urlparse(self.path)
         query_params = urllib.parse.parse_qs(parsed_path.query)
 
-        match parsed_path.path:
-            case "/":
-                response = {'type': "hello", "reason": 'world'}
-                status = 200
-            case "/graph":
-                self.draw_graph_dandler(query_params)
-                status = 200
-            case "/wordlist":
-                response = self.wordlist_handler(query_params)
-                status = 200
-            case "/getsecret":
-                response = self.getsecret_handler(query_params)
-                status = 200
+        try:
+            match parsed_path.path:
+                case "/":
+                    response = {'type': "hello", "reason": 'world'}
+                    status = 200
+                case "/graph":
+                    self.draw_graph_dandler(query_params)
+                    status = 200
+                case "/wordlist":
+                    response = self.wordlist_handler(query_params)
+                    status = 200
+                case "/getsecret":
+                    response = self.getsecret_handler(query_params)
+                    status = 200
+        except Exception as e:
+            response = { 'type': 'error', 'reason': str(e) }
+            status = 500
 
         self.send_response(status)  # Bad request
         self.send_header('Content-type', 'application/json')

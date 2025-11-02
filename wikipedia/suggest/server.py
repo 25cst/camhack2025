@@ -9,7 +9,6 @@ class Handler(BaseHTTPRequestHandler):
     # request = empty body
     # response = { words: list[str] }
     def wordlist_handler(self):
-        print("got here")
         return { 'words': list(map((lambda i : readdb.id_to_title[i]), readdb.relations.keys())) }
 
     # request = { guess: str, secret: str, n: int } you should return n hints
@@ -35,6 +34,9 @@ class Handler(BaseHTTPRequestHandler):
                 case "/gethint":
                     response = self.gethint_handler(query_params)
                     status = 200
+        except Exception as e:
+            response = { 'type': 'error', 'reason': str(e) }
+            status = 500
 
         self.send_response(status)  # Bad request
         self.send_header('Content-type', 'application/json')
