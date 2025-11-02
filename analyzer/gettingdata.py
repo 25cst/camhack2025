@@ -50,12 +50,23 @@ def getWord(word):
     norms = np.array([normalizationValues.get(year, np.nan) for year in years])
 
     values = counts/norms
+    values = smooth(values)
     values = (values/max(values))
+
     # normalise 0 to 1 so that we can overlay
     # values = values/max(values)
 
     return years, values
-        
+
+def smooth(values : np.ndarray, window=5):
+
+    v = np.asarray(values, dtype=float)
+    if window < 2 or window > v.size:
+        return v
+    k = np.ones(window, dtype=float)
+    num = np.convolve(v, k, mode="same")
+    den = np.convolve(np.ones_like(v), k, mode="same")
+    return num/den 
 
 def drawGraph(years: list[np.ndarray], values: list[np.ndarray], words, save_path=None, show=False):
     """
@@ -124,7 +135,6 @@ def drawGraph(years: list[np.ndarray], values: list[np.ndarray], words, save_pat
             x_i, y_i = x_i[mask], y_i[mask]
 
             # Fade older guesses
-            color = cmap(i / max(1, n_guesses - 1))
             alpha = 0.3 + 0.7 * ((i+1) / n_guesses)
             ax.plot(
                 x_i,
@@ -189,5 +199,5 @@ def classify(dataset, years):
 
 if __name__ == '__main__':
 
-    graph_of_words(["the", "war"], save_path=IMG_SAVE_PATH, show=True)
+    graph_of_words(["the", "war", "and", "orange", "maiden"], save_path=IMG_SAVE_PATH, show=True)
     # print(classify(list(years), list(values)))
