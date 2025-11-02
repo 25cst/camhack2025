@@ -19,11 +19,6 @@ class Handler(BaseHTTPRequestHandler):
 
     def wordlist_handler(self, body):
         return self.words
-        
-    # request = empty
-    # response = { secret: str }
-    def getsecret_handler(self, body):
-        raise Exception("TODO")
 
     # request = { keywords: list[str] }
     # response = { image: str }

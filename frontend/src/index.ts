@@ -6,6 +6,26 @@ import path = require('path');
 const app = express();
 const port = process.env.PORT ?? 8083;
 
+let graphCache: Map<string, string> = new Map();
+let codeMap: Map<string, string> = new Map()
+
+function createGraphURL(words: string[]) {
+    const baseURL = 'http://localhost:8082/graph';
+    const keywords = words.map(word => `keywords=${encodeURIComponent(word)}`).join('&');
+    return `${baseURL}?${keywords}`;
+}
+
+async function getGraph(words: string[]): Promise<string> {
+    let res = await fetch(createGraphURL(words));
+    let json = await res.json()
+    assert(typeof json === "object" && json !== null)
+
+    assert("img" in json)
+    let s = json.img;
+    assert(typeof s === "string")
+    return s
+}
+
 // Middleware
 app.use(express.json());
 app.use(express.static('static'));
@@ -154,6 +174,31 @@ app.get('/api/guess', (req, res) => {
     res.status(500).json({ error: 'Failed to process guess' });
   }
 });
+
+app.get('/api/graph', async (req, res) => {
+    let { code, guesses } = req.query;
+    if(typeof guesses === "string") {
+        guesses = [ guesses ]
+    }
+
+    assert(typeof code === "string")
+    let word = codeMap.get(code)
+    assert(word !== undefined)
+
+    assert (Array.isArray(guesses))
+
+    let imageName = await getGraph([word].concat(guesses.map(s => `${s}`)))
+    let imagePath = path.join(`../analyzer/img/${imageName}`)
+
+    res.sendFile(imagePath, (err) => {
+            if (err) {
+                console.error('Error sending file:', err);
+                res.status(500).end();
+            } else {
+                console.log('Image sent:', imagePath);
+            }
+        });
+})
 
 app.get('/api/wordlist', (req, res) => {
   try {
