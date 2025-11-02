@@ -2,21 +2,40 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
 import json
 import os
+import urllib.parse
 
 class Handler(BaseHTTPRequestHandler):
+    # request = empty
+    # response = { words: list[str] }
     def wordlist_handler(self, body):
         raise Exception("TODO")
 
+    # request = empty
+    # response = { secret: str }
     def getsecret_handler(self, body):
+        raise Exception("TODO")
+
+    # request = { keywords: list[str] }
+    # response = { image: str }
+    # in this response, you should save the image file to /freq-scraping/img
+    # and return the file name of the file
+    def draw_graph_dandler(self, body):
         raise Exception("TODO")
 
     def do_GET(self):
         response = { 'type': 'error', 'reason': 'Not found' }
         status = 404
 
-        if self.path == "/":
-            response = {'type': "hello", "reason": 'world'}
-            status = 200
+        parsed_path = urllib.parse.urlparse(self.path)
+        query_params = urllib.parse.parse_qs(parsed_path.query)
+
+        match parsed_path.path:
+            case "/":
+                response = {'type': "hello", "reason": 'world'}
+                status = 200
+            case "/graph":
+                self.draw_graph_dandler(query_params)
+                status = 200
 
         self.send_response(status)  # Bad request
         self.send_header('Content-type', 'application/json')
@@ -40,8 +59,6 @@ class Handler(BaseHTTPRequestHandler):
                 case "/getsecret":
                     response = self.getsecret_handler(data)
                     status = 200
-                case p:
-                    if p.startswith("/graph")
         except json.JSONDecodeError:
             response = {'type': "error", "reason": 'Invalid JSON'}
             status = 400
