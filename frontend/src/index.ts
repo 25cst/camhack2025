@@ -84,7 +84,7 @@ function loadWordList(): string[] {
       .map(word => word.trim())
       .filter(word => word.length > 0)
       .filter(word => /^[a-zA-Z]+$/.test(word))
-      .map(word => word.toLowerCase());
+      .map(word => word);
   } catch (error) {
     console.error('Error loading word list:', error);
     return [
@@ -166,8 +166,8 @@ app.get('/api/guess', (req, res) => {
 
     const roundNum = parseInt(round);
 
-    const codeLower = code.toLowerCase();
-    const guessLower = guess.toLowerCase();
+    const codeLower = code;
+    const guessLower = guess;
 
     console.log(`Guess for target "${code}": "${guess}" in round ${roundNum}`);
     
