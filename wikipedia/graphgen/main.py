@@ -72,18 +72,4 @@ for title in allowed:
     entryLines.append("|".join(entries))
 
 with open("cache.txt", "w") as f:
-  f.write("\n".join(entryLines))
-
-con = sqlite3.connect("relations.sqlite")
-cursor = con.cursor()
-
-with open("relations.sql", "r") as f:
-    cursor.executescript(f.read())
-
-for title in allowed:
-    neighbours = relations[title]
-    cursor.executemany("INSERT INTO relations VALUES (?, ?);", zip([title] * len(neighbours), neighbours))
-
-con.commit()
-
-print(len(cursor.execute("SELECT * FROM relations;").fetchall()))
+    f.write("\n".join(entryLines))

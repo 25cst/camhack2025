@@ -76,14 +76,12 @@ def get_nodes_bfs_lazy(source):
 
 def get_hints(guess, secret, n, hint_level):
     hints = set()
-    guess_dist = 2 * hint_level
+    guess_dist = -1
     for hint_path in get_multiple_paths_lazy(guess, secret):
         hint_length = len(hint_path)
-        if len(hints) == 0:
+        if guess_dist == -1:
             # Get the closest distance between guess and secret, used later to get other hints at the same distance
             guess_dist = hint_length - 1
-
-        print(hint_path)
 
         # Either the secret is the next word after guess, or the guess is spot on
         if hint_length <= 2:
@@ -93,27 +91,23 @@ def get_hints(guess, secret, n, hint_level):
         if len(hints) == n:
             return hints
 
-    print("got", hints)
-    print("going to at dist, looking for dist max", max(guess_dist - hint_level, 1), guess_dist, hint_level)
-
-    for hint in get_nodes_at_dist_lazy(secret, max(guess_dist - hint_level, 1)):
-        print(hint)
+    for hint in get_nodes_at_dist_lazy(secret, max((guess_dist - hint_level if guess_dist >= 0 else hint_level), 1)):
         if hint != guess and hint != secret and hint not in hints:
             hints.add(hint)
 
         if len(hints) == n:
             return hints
-
-    print("got", hints)
-    print("goint to plain bfs")
 
     # this is just in case the other two approaches don't find enough hints - searches for any nodes that are not yet in hints
     for hint in get_nodes_bfs_lazy(secret):
-        print(hint)
         if hint != guess and hint != secret and hint not in hints:
             hints.add(hint)
 
         if len(hints) == n:
             return hints
 
-    return hints
+    # if no path found, set the distance to a big number so that closeness is 0
+    if guess_dist == -1:
+        guess_dist = 100
+
+    return hints, int(max(100 * (6 - guess_dist) / 6, 0))

@@ -12,10 +12,11 @@ class Handler(BaseHTTPRequestHandler):
     def wordlist_handler(self):
         return { 'words': list(map((lambda i : readdb.id_to_title[i]), readdb.relations.keys())) }
 
-    # request = { guess: str, secret: str, n: int } you should return n hints
-    # response = { words: list[str], closeness: int } closeness should be a int from 0 to 100
+    # request = { guess: str, secret: str, n: int, hint_level: int } you should return n hints
+    # response = { words: list[tuple[str, int]], closeness: int } closeness should be a int from 0 to 100
     def gethint_handler(self, body):
-        return { 'words': list(get_hints(body["guess"], body["secret"], body["n"], body["hint_level"])) }
+        hints, closeness = get_hints(body["guess"], body["secret"], body["n"], body["hint_level"])
+        return { 'words': list(zip(hints, [closeness] * len(hints))), 'closeness': closeness }
 
     def do_GET(self):
         response = { 'type': 'error', 'reason': 'Not found' }
