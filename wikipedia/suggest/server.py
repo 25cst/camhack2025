@@ -12,7 +12,7 @@ class Handler(BaseHTTPRequestHandler):
         return { 'words': list(map((lambda i : readdb.id_to_title[i]), readdb.relations.keys())) }
 
     # request = { guess: str, secret: str, n: int } you should return n hints
-    # response = { words: list[str] }
+    # response = { words: list[str], closeness: int } closeness should be a int from 0 to 100
     def gethint_handler(self, body):
         raise Exception("TODO")
 
