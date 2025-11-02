@@ -7,7 +7,7 @@
         <link href="css/style.css" rel="stylesheet">
     </head>
     <body>
-        <img src="/api/graph" alt="">
+        <img src="/api/graph" alt="" id="graph">
         <button id="guess">make guess</button>
         <ol id="list">
         </ol>
@@ -19,6 +19,7 @@ const params = new URLSearchParams(url.search);
 // Get a specific parameter
 const code = params.get('code'); 
 
+        document.getElementById("graph").src = `/api/graph?code=${code}`
         let round = 1
         document.getElementById("guess").onclick = async () => {
             guess = prompt("Make a guess")
