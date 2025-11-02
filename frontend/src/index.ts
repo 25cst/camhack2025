@@ -184,6 +184,7 @@ app.get('/api/guess', (req, res) => {
   }
 });
 
+/*
 app.get('/api/graph', async (req, res) => {
     let { code, guesses } = req.query;
     if(typeof guesses === "string") {
@@ -207,6 +208,7 @@ app.get('/api/graph', async (req, res) => {
             }
         });
 })
+*/
 
 app.get('/api/wordlist', (req, res) => {
   try {
