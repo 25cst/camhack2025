@@ -12,7 +12,8 @@ IMG_SAVE_PATH = Path(__file__).parent / "img" / "graph.png"
 class Handler(BaseHTTPRequestHandler):
     # request = empty
     # response = { words: list[str] }
-
+    years = []
+    values = []
     with open(WORDLIST_PATH) as f:
         words = {"words" : [w.strip() for w in f.readlines()]}
 
@@ -30,7 +31,7 @@ class Handler(BaseHTTPRequestHandler):
     # and return the file name of the file
     def draw_graph_handler(self, body):
         # print(body['keywords'])
-        gettingdata.graph_of_words(body['keywords'], save_path=IMG_SAVE_PATH)
+        self.years, self.values = gettingdata.graph_of_words(body['keywords'], save_path=IMG_SAVE_PATH, years=self.years, values=self.values)
         return {'image':str(IMG_SAVE_PATH) }
     
     def do_GET(self):
