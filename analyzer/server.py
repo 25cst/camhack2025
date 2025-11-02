@@ -3,13 +3,16 @@ from socketserver import ThreadingMixIn
 import json
 import os
 import urllib.parse
+from pathlib import Path
 
 class Handler(BaseHTTPRequestHandler):
     # request = empty
     # response = { words: list[str] }
     def wordlist_handler(self, body):
-        raise Exception("TODO")
-
+        file_path = Path(__file__).parent / "wordlist.txt"
+        with open(file_path) as f:
+            return {"words" : [w.strip() for w in f.readlines()]}
+        
     # request = empty
     # response = { secret: str }
     def getsecret_handler(self, body):
@@ -89,4 +92,5 @@ def run():
     server.serve_forever()
 
 if __name__ == '__main__':
+    
     run()
