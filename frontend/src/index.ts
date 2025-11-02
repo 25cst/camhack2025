@@ -172,7 +172,7 @@ app.get('/api/guess', (req, res) => {
 
     console.log(`Guess for target "${code}": "${guess}" in round ${roundNum}`);
     
-    fetch(`http://127.0.0.1:8081/gethint?guess=${guess}&secret=${codeMap.get(code)}&n=10&hint_level=3`)
+    fetch(`http://127.0.0.1:8081/gethint?guess=${guess}&secret=${codeMap.get(code)}&n=10&hint_level=2`)
         .then((response) => response.json())
         .then((json) => {
     const response: GuessResponse = json as GuessResponse
