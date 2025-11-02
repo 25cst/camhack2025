@@ -30,8 +30,8 @@ async function getGraph(words: string[]): Promise<string> {
     let json = await res.json()
     assert(typeof json === "object" && json !== null)
 
-    assert("img" in json)
-    let s = json.img;
+    assert("image" in json)
+    let s = json.image;
     assert(typeof s === "string")
     return s
 }
