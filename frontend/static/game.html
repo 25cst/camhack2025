@@ -27,10 +27,10 @@ const code = params.get('code');
             guess = prompt("Make a guess")
             guesses.push(guess)
 
-            let hints = await fetch(`/api/guess?guess=${guess}&code=${code}&round=${round}`)
+            let hints = await fetch(`/api/guess?guess=${guess}&code=${code}&round=${round}${guesses.map(s => `&guesses=${s}`).join("")}`)
             hints = await hints.json()
-// ${guesses.map(s => `&guesses=${s}`).join("")}
-            document.getElementById("list").innerHTML += <li>Guess ${round++}: ${guess}<br>hints: ${hints.words.map(([word, score]) => word).join(", ")}<li>`
+// 
+            document.getElementById("list").innerHTML += `<li>Guess ${round++}: ${guess}<br>hints: ${hints.words.map(([word, score]) => word).join(", ")}<li>`
         }
 
     </script>
