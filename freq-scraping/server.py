@@ -77,11 +77,11 @@ class ThreadingSimpleServer(ThreadingMixIn, HTTPServer):
 def getPort():
     s = os.getenv("PORT")
     if s == None:
-        return 8081
+        return 8082
     try:
         return int(s)
     except:
-        return 8081
+        return 8082
 
 def run():
     server = ThreadingSimpleServer(('127.0.0.1', getPort()), Handler)
