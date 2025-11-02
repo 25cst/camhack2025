@@ -171,7 +171,6 @@ app.get('/api/guess', (req, res) => {
       });
     }
 
-    code = codeMap.get(code) ?? "Tiger"
     const codeLower = code.toLowerCase();
     const guessLower = guess.toLowerCase();
 
@@ -189,8 +188,12 @@ app.get('/api/guess', (req, res) => {
 
     console.log(`Guess for target "${code}": "${guess}" in round ${roundNum}`);
     
-    const response: GuessResponse = { code };
+    fetch(`http://localhost:8081/gethint?guess=${guess}&secret=${codeMap.get(code)}&n=3&hint_level=2`)
+        .then((response) => response.json())
+        .then((json) => {
+    const response: GuessResponse = json as GuessResponse
     res.json(response);
+    })
   } catch (error) {
     console.error('Error processing guess:', error);
     res.status(500).json({ error: 'Failed to process guess' });
