@@ -153,7 +153,7 @@ app.get('/api/newgame', (req, res) => {
 app.get('/api/guess', (req, res) => {
   try {
     // Use type assertion with explicit string conversion
-    const code = req.query.code as string;
+    let code = req.query.code as string;
     const guess = req.query.guess as string;
     const round = req.query.round as string;
     
@@ -171,6 +171,7 @@ app.get('/api/guess', (req, res) => {
       });
     }
 
+    code = codeMap.get(code)
     const codeLower = code.toLowerCase();
     const guessLower = guess.toLowerCase();
 
