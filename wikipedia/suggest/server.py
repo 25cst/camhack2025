@@ -7,9 +7,9 @@ import readdb
 class Handler(BaseHTTPRequestHandler):
     # request = empty body
     # response = { words: list[str] }
-    def wordlist_handler(self, _):
+    def wordlist_handler(self):
         print("got here")
-        return { 'words': map((lambda i : readdb.id_to_title[i]), readdb.relations.keys()) }
+        return { 'words': list(map((lambda i : readdb.id_to_title[i]), readdb.relations.keys())) }
 
     # request = { guess: str, secret: str, n: int } you should return n hints
     # response = { words: list[str] }
@@ -20,9 +20,13 @@ class Handler(BaseHTTPRequestHandler):
         response = { 'type': 'error', 'reason': 'Not found' }
         status = 404
 
-        if self.path == "/":
-            response = {'type': "hello", "reason": 'world'}
-            status = 200
+        match self.path:
+            case "/":
+                response = {'type': "hello", "reason": 'world'}
+                status = 200
+            case "/wordlist":
+                response = self.wordlist_handler()
+                status = 200
 
         self.send_response(status)  # Bad request
         self.send_header('Content-type', 'application/json')
@@ -39,9 +43,6 @@ class Handler(BaseHTTPRequestHandler):
             data = json.loads(post_data)
 
             match self.path:
-                case "/wordlist":
-                    response = self.wordlist_handler(data)
-                    status = 200
                 case "/gethint":
                     response = self.gethint_handler(data)
                     status = 200
