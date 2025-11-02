@@ -171,7 +171,7 @@ app.get('/api/guess', (req, res) => {
       });
     }
 
-    code = codeMap.get(code)
+    code = codeMap.get(code) ?? "Tiger"
     const codeLower = code.toLowerCase();
     const guessLower = guess.toLowerCase();
 
