@@ -5,9 +5,13 @@ import os
 
 
 class Handler(BaseHTTPRequestHandler):
+    # request = empty body
+    # response = { words: list[str] }
     def wordlist_handler(self, body):
         raise Exception("TODO")
 
+    # request = { guess: str, secret: str, n: int } you should return n hints
+    # response = { words: list[str] }
     def gethint_handler(self, body):
         raise Exception("TODO")
 
