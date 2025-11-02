@@ -1,9 +1,11 @@
+import re
 from collections import deque
 from sentence_transformers import SentenceTransformer
 import readdb
 
+print("Loading transformer model")
 model = SentenceTransformer("all-MiniLM-L6-v2")
-
+print("Done loading model")
 
 def get_nodes_at_dist_lazy(source, dist):
     source = readdb.title_to_id[source]
@@ -126,3 +128,6 @@ def get_hints(guess, secret, n, hint_level):
     #     guess_dist = 100
 
     return hints, get_closeness(guess, secret)
+
+def get_possible_words(frag, n):
+    return list(filter(lambda x: x[:len(frag)].lower() == frag.lower(), readdb.title_to_id.keys()))[:n]

@@ -4,7 +4,7 @@ import json
 import os
 import readdb
 import urllib.parse
-from suggest import get_hints
+from suggest import get_hints, get_possible_words
 
 class Handler(BaseHTTPRequestHandler):
     # request = empty body
@@ -18,6 +18,12 @@ class Handler(BaseHTTPRequestHandler):
         print(body)
         hints, closeness = get_hints(body["guess"][0], body["secret"][0], int(body["n"][0]), int(body["hint_level"][0]))
         return { 'words': list(hints), 'closeness': closeness }
+
+    # request = { prefix: str }
+    # response = { words: list[str] }
+    def getsuggestions_handler(self, body):
+        suggestions = get_possible_words(body["prefix"][0], 5)
+        return { 'words': suggestions }
 
     def do_GET(self):
         response = { 'type': 'error', 'reason': 'Not found' }
@@ -36,6 +42,9 @@ class Handler(BaseHTTPRequestHandler):
                     status = 200
                 case "/gethint":
                     response = self.gethint_handler(query_params)
+                    status = 200
+                case "/suggestions":
+                    response = self.getsuggestions_handler(query_params)
                     status = 200
         except Exception as e:
             response = { 'type': 'error', 'reason': str(e) }
