@@ -2,13 +2,14 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
 import json
 import os
-
+import readdb
 
 class Handler(BaseHTTPRequestHandler):
     # request = empty body
     # response = { words: list[str] }
-    def wordlist_handler(self, body):
-        raise Exception("TODO")
+    def wordlist_handler(self, _):
+        print("got here")
+        return { 'words': map((lambda i : readdb.id_to_title[i]), readdb.relations.keys()) }
 
     # request = { guess: str, secret: str, n: int } you should return n hints
     # response = { words: list[str] }
@@ -29,8 +30,7 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps(response).encode('utf-8'))
 
     def do_POST(self):
-        content_length = int(self.headers['Content-Length'])  # Get the size of the POST data
-        post_data = self.rfile.read(content_length)  # Read the POST data
+        post_data = self.rfile.read()  # Read the POST data
         # Assuming the POST data is JSON
 
         response = { 'type': 'error', 'reason': 'Not found' }
