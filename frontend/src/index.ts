@@ -193,6 +193,7 @@ app.get('/api/graph', async (req, res) => {
     assert(typeof code === "string")
     let word = codeMap.get(code)
     assert(word !== undefined)
+    guesses ??= []
 
     assert (Array.isArray(guesses))
 
