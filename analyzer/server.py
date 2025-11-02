@@ -7,7 +7,7 @@ from pathlib import Path
 import gettingdata
 
 WORDLIST_PATH = Path(__file__).parent / "data" / "wordlist.txt"
-IMG_SAVE_PATH = Path(__file__).parent / "img" / "graph.png"
+IMG_SAVE_PATH = Path(__file__).parent / "img"
 
 class Handler(BaseHTTPRequestHandler):
     # request = empty
@@ -31,8 +31,9 @@ class Handler(BaseHTTPRequestHandler):
     # and return the file name of the file
     def draw_graph_handler(self, body):
         # print(body['keywords'])
-        self.years, self.values = gettingdata.graph_of_words(body['keywords'], save_path=IMG_SAVE_PATH, years=self.years, values=self.values)
-        return {'image':str(IMG_SAVE_PATH) }
+        file_path = IMG_SAVE_PATH / ("-".join(body['keywords']) + ".png")
+        self.years, self.values = gettingdata.graph_of_words(body['keywords'], save_path=file_path, years=self.years, values=self.values)
+        return {'image':str(file_path) }
     
     def do_GET(self):
         response = { 'type': 'error', 'reason': 'Not found' }
