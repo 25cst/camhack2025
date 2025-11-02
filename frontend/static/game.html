@@ -34,7 +34,7 @@ const code = params.get('code');
                 return
             }
 
-            document.getElementById("graph").src = `/api/graph?code=${code}${guesses.map(s => `&keywords=${s}`).join("")}`
+            document.getElementById("graph").src = `/api/graph?code=${code}${guesses.map(s => `&guesses=${s}`).join("")}`
 // 
             document.getElementById("list").innerHTML += `<li>Guess ${round++}: ${guess}<br>hints: ${hints.words.map(([word, score]) => word).join(", ")}<li>`
         }
