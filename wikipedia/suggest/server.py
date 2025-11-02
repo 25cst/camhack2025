@@ -3,6 +3,7 @@ from socketserver import ThreadingMixIn
 import json
 import os
 import readdb
+import urllib.parse
 
 class Handler(BaseHTTPRequestHandler):
     # request = empty body
@@ -20,44 +21,26 @@ class Handler(BaseHTTPRequestHandler):
         response = { 'type': 'error', 'reason': 'Not found' }
         status = 404
 
-        match self.path:
-            case "/":
-                response = {'type': "hello", "reason": 'world'}
-                status = 200
-            case "/wordlist":
-                response = self.wordlist_handler()
-                status = 200
+        parsed_path = urllib.parse.urlparse(self.path)
+        query_params = urllib.parse.parse_qs(parsed_path.query)
 
-        self.send_response(status)  # Bad request
-        self.send_header('Content-type', 'application/json')
-        self.end_headers()
-        self.wfile.write(json.dumps(response).encode('utf-8'))
-
-    def do_POST(self):
-        post_data = self.rfile.read()  # Read the POST data
-        # Assuming the POST data is JSON
-
-        response = { 'type': 'error', 'reason': 'Not found' }
-        status = 404
         try:
-            data = json.loads(post_data)
-
             match self.path:
-                case "/gethint":
-                    response = self.gethint_handler(data)
+                case "/":
+                    response = {'type': "hello", "reason": 'world'}
                     status = 200
-        except json.JSONDecodeError:
-            response = {'type': "error", "reason": 'Invalid JSON'}
-            status = 400
-        except Exception as e:
-            response = {'type': "error", "reason": str(e)}
-            status = 500
+                case "/wordlist":
+                    response = self.wordlist_handler()
+                    status = 200
+                case "/gethint":
+                    response = self.gethint_handler(query_params)
+                    status = 200
 
         self.send_response(status)  # Bad request
         self.send_header('Content-type', 'application/json')
         self.end_headers()
         self.wfile.write(json.dumps(response).encode('utf-8'))
-        
+
 class ThreadingSimpleServer(ThreadingMixIn, HTTPServer):
     pass
 
