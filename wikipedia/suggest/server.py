@@ -17,7 +17,7 @@ class Handler(BaseHTTPRequestHandler):
     def gethint_handler(self, body):
         print(body)
         hints, closeness = get_hints(body["guess"][0], body["secret"][0], int(body["n"][0]), int(body["hint_level"][0]))
-        return { 'words': list(zip(hints, [closeness] * len(hints))), 'closeness': closeness }
+        return { 'words': list(hints), 'closeness': closeness }
 
     def do_GET(self):
         response = { 'type': 'error', 'reason': 'Not found' }
