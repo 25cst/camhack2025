@@ -12,8 +12,6 @@ IMG_SAVE_PATH = Path(__file__).parent / "img"
 class Handler(BaseHTTPRequestHandler):
     # request = empty
     # response = { words: list[str] }
-    years = []
-    values = []
     with open(WORDLIST_PATH) as f:
         words = {"words" : [w.strip() for w in f.readlines()]}
 
@@ -26,8 +24,24 @@ class Handler(BaseHTTPRequestHandler):
     # and return the file name of the file
     def draw_graph_handler(self, body):
         # print(body['keywords'])
-        file_path = IMG_SAVE_PATH / ("-".join(body['keywords']) + ".png")
-        self.years, self.values = gettingdata.graph_of_words(body['keywords'], save_path=file_path, years=self.years, values=self.values)
+        keywords = body.get('keywords')
+        if keywords is None:
+            raise ValueError('keywords query parameter is required')
+
+        if isinstance(keywords, list):
+            keyword_list = keywords
+        else:
+            keyword_list = [keywords]
+
+        keyword_list = [str(k).strip() for k in keyword_list if str(k).strip()]
+        if not keyword_list:
+            raise ValueError('At least one keyword must be provided')
+
+        file_path = IMG_SAVE_PATH / ("-".join(keyword_list) + ".png")
+
+        years: list = []
+        values: list = []
+        gettingdata.graph_of_words(keyword_list, years=years, values=values, save_path=file_path)
         return {'image':str(file_path) }
     
     def do_GET(self):
@@ -38,19 +52,18 @@ class Handler(BaseHTTPRequestHandler):
         query_params = urllib.parse.parse_qs(parsed_path.query)
 
         try:
-            match parsed_path.path:
-                case "/":
-                    response = {'type': "hello", "reason": 'world'}
-                    status = 200
-                case "/graph":
-                    response = self.draw_graph_handler(query_params)
-                    status = 200
-                case "/wordlist":
-                    response = self.wordlist_handler(query_params)
-                    status = 200
-                case "/getsecret":
-                    response = self.getsecret_handler(query_params)
-                    status = 200
+            if parsed_path.path == "/":
+                response = {'type': "hello", "reason": 'world'}
+                status = 200
+            elif parsed_path.path == "/graph":
+                response = self.draw_graph_handler(query_params)
+                status = 200
+            elif parsed_path.path == "/wordlist":
+                response = self.wordlist_handler(query_params)
+                status = 200
+            elif parsed_path.path == "/getsecret":
+                response = self.getsecret_handler(query_params)
+                status = 200
         except Exception as e:
             response = { 'type': 'error', 'reason': str(e) }
             status = 500

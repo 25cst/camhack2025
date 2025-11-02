@@ -113,8 +113,12 @@ function getRandomWord(minLength: number, maxLength: number): string {
   
   const randomIndex = Math.floor(Math.random() * filteredWords.length);
   let out = filteredWords[randomIndex];
+function capitalizeFirstWord(str:string): string {
+    if (!str) return str; // Check for empty string
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
   assert(out !== undefined);
-  return out;
+  return capitalizeFirstWord(out);
 }
 
 app.get('/api/hascode', (req, res) => {
