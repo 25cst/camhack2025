@@ -3,12 +3,11 @@ from socketserver import ThreadingMixIn
 import json
 import os
 
-
 class Handler(BaseHTTPRequestHandler):
     def wordlist_handler(self, body):
         raise Exception("TODO")
 
-    def gethint_handler(self, body):
+    def getsecret_handler(self, body):
         raise Exception("TODO")
 
     def do_GET(self):
@@ -38,9 +37,11 @@ class Handler(BaseHTTPRequestHandler):
                 case "/wordlist":
                     response = self.wordlist_handler(data)
                     status = 200
-                case "/gethint":
-                    response = self.gethint_handler(data)
+                case "/getsecret":
+                    response = self.getsecret_handler(data)
                     status = 200
+                case p:
+                    if p.startswith("/graph")
         except json.JSONDecodeError:
             response = {'type': "error", "reason": 'Invalid JSON'}
             status = 400
